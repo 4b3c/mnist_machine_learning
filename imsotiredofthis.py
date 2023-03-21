@@ -1,4 +1,4 @@
-import numpy as np, gzip, random
+import numpy as np, gzip, random, math
 
 
 def sigmoid(z):
@@ -59,7 +59,7 @@ class neural_network:
 	def __init__(self, n_per_l):
 		self.layers = [layer(inp, nrn) for inp, nrn in zip(n_per_l, n_per_l[1:])]
 		self.num_of_layers = len(n_per_l)
-		print("layers created")
+		print("Network created")
 
 	def forwardprop(self, input_):
 		self.input_ = input_
@@ -70,7 +70,12 @@ class neural_network:
 		self.output = layer.activations
 
 	def backwardprop(self, target):
-		cost = (self.layers[-1].activations - target)
+		cost = [-math.log(-x + 1) for x in self.output]
+		if self.output[np.argmax(target)] != 0:
+			cost[np.argmax(target)] = 2 * (math.log(self.output[np.argmax(target)]))
+		else:
+			cost[np.argmax(target)] = 2 * (math.log(0.01))
+
 		cost_prime = cost * sigmoid_prime(self.layers[-1].values)
 
 		self.layers[-1].b_adj = cost_prime
@@ -81,13 +86,18 @@ class neural_network:
 		for l in range(2, len(self.layers) + 1):
 			cost_prime = np.dot(self.layers[-l + 1].weights, cost_prime) * sigmoid_prime(self.layers[-l].values)
 
-			self.layers[-l].b_adj += cost_prime
-			self.layers[-l].w_adj += np.dot(np.array([cost_prime]).transpose(), np.array([self.input_])).transpose()
+			if l == len(self.layers):
+				prev_act = self.input_
+			else:
+				prev_act = self.layers[-l - 1].activations
 
+			self.layers[-l].b_adj += cost_prime
+			self.layers[-l].w_adj += np.dot(np.array([cost_prime]).transpose(), np.array([prev_act])).transpose()
 
 	def train(self, lrn_rt, batch_size, epochs, ep_size, inputs):
 		train_data, test_i, test_l = inputs
-		print("mini_batches shaped")
+		print("Data gathered")
+		print("Starting training")
 
 		for ep in range(epochs):
 			random.shuffle(train_data)
@@ -111,11 +121,4 @@ class neural_network:
 
 			print("Epoch", ep, ":", correct, "/", len(test_l))
 
-
-net = neural_network([784, 30, 10])
-print("getting data")
-data = get_data()
-print("data collected")
-print("starting training")
-net.train(8, 30, 30, 60000, data)
-
+		return correct
