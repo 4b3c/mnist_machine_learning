@@ -47,13 +47,16 @@ while True:
 		pygame.draw.circle(window, ((255, 255, 255)), (mouse_pos[0], mouse_pos[1]), 40)
 		drawing = True
 
+	elif pygame.mouse.get_pressed()[2]:
+		window.fill((0, 0, 0))
+		drawing = False
+
 	elif drawing == True:
 		data = np.array(get_averages(window))
 		data = data / 255
 		net.forwardprop(data)
+		for count, output in enumerate(net.output):
+			pygame.draw.rect(window, (output * 255, output * 255, output * 255), (78.4 * count, 50, 50, 50))
+			pygame.draw.rect(window, (255, 255, 255), (78.4 * count, 50, 50, 50), 3)
 		print(np.argmax(net.output))
-		drawing = False
-
-	elif pygame.mouse.get_pressed()[2]:
-		window.fill((0, 0, 0))
 		drawing = False
