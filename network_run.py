@@ -56,7 +56,7 @@ while True:
 		data = data / 255
 		net.forwardprop(data)
 		for count, output in enumerate(net.output):
-			pygame.draw.rect(window, (output * 255, output * 255, output * 255), (78.4 * count, 50, 50, 50))
-			pygame.draw.rect(window, (255, 255, 255), (78.4 * count, 50, 50, 50), 3)
+			pygame.draw.rect(window, (output * 255, output * 255, output * 255), (14 + (78.4 * count), 20, 50, 50))
+			pygame.draw.rect(window, (255, 255, 255), (14 + (78.4 * count), 20, 50, 50), 3)
 		print(np.argmax(net.output))
 		drawing = False
