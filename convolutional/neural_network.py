@@ -57,19 +57,28 @@ class convolutional_layer:
 					input4 = np.transpose(input3, (0, 2, 1))
 					output_[y - 1][x - 1] = np.dot(filter_.flatten(), input4.flatten())
 
-		print(output_)
 		print(output_.shape)
+		return output_
+
+	# input must be an array [height, width]
+	def max_pooling(self, input_):
+		output_ = np.zeros((int(len(input_) / 2), int(len(input_[0]) / 2)))
+		for y in range(int(len(input_) / 2)):
+			for x in range(int(len(input_[0]) / 2) - 10):
+				output_[y][x] = max(input_[y][x], input_[y + 1][x], input_[y][x + 1], input_[y + 1][x + 1])
+
+		print(output_.shape)
+		return output_
 
 	def forward_prop(self, input_):
-		pass
+		convolved = self.convolve(input_)
+		pooled = self.max_pooling(convolved)
+
+		print(pooled)
 
 
-input_arr = np.array(Image.open("C:/Users/Abram/Desktop/Programming/Python/mnist_machine_learning/training_data/factorio_image.png"))
-input_arr = np.transpose(input_arr[:,:,:3], (0, 2, 1))
-print(input_arr.shape)
+input_arr = np.array(Image.open("C:/Users/Abram/Desktop/Programming/Python/mnist_machine_learning/training_data/factorio_image.png"))[:,:,:3]
+input_arr = np.transpose(input_arr / 255, (0, 2, 1))
 
 layer = convolutional_layer([3, 3, 4], 2)
-layer.convolve(input_arr)
-
-# input_arr = np.random.rand(5, 1, 6)
-# print(input_arr)
+layer.forward_prop(input_arr)
