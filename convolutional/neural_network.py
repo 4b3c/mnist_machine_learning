@@ -1,6 +1,8 @@
 import numpy as np, gzip, random, math
 from PIL import Image
 
+np.random.seed(0)
+
 def sigmoid(z):
 	return 1.0 / (1.0 + np.exp(-z))
 
@@ -57,17 +59,16 @@ class convolutional_layer:
 					input4 = np.transpose(input3, (0, 2, 1))
 					output_[y - 1][x - 1] = np.dot(filter_.flatten(), input4.flatten())
 
-		print(output_.shape)
 		return output_
 
 	# input must be an array [height, width]
 	def max_pooling(self, input_):
-		output_ = np.zeros((int(len(input_) / 2), int(len(input_[0]) / 2)))
-		for y in range(int(len(input_) / 2)):
-			for x in range(int(len(input_[0]) / 2) - 10):
-				output_[y][x] = max(input_[y][x], input_[y + 1][x], input_[y][x + 1], input_[y + 1][x + 1])
-
-		print(output_.shape)
+		output_ = np.zeros((int(input_.shape[0] / 2), int(input_.shape[1] / 2)))
+		
+		for h in range(0, input_.shape[0] - 1, 2):
+			for w in range(0, input_.shape[1] - 1, 2):
+				output_[h//2, w//2] = np.max(input_[h:h + 2, w:w + 2])
+		
 		return output_
 
 	def forward_prop(self, input_):

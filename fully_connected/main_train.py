@@ -1,4 +1,4 @@
-import neural_network as nn, pickle
+import imsotiredofthis as nn, pickle
 
 data = nn.get_data()
 
