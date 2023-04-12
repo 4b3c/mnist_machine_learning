@@ -45,21 +45,21 @@ class convolutional_layer:
 	def convolve(self, input_):
 		input_ = np.array(input_)
 		output_ = np.zeros((len(input_) - 2, len(input_[0][0]) - 2))
+
 		for filter_ in self.filters:
 			for y in range(self.filt_radius, len(input_) - (self.filt_radius * 2) + 1):
 				for x in range(self.filt_radius, len(input_[0][0]) - (self.filt_radius * 2) + 1):
 
-					# rearranges from [height, depth, width] to [width, height, depth]
-					input2 = np.transpose(input_, (2, 0, 1))
-					input2 = input2[x - self.filt_radius:x + (self.filt_radius * 2)]
-					# rearranges from [width, height, depth] to [height, width, depth]
-					input3 = np.transpose(input2, (1, 0, 2))
-					input3 = input3[y - self.filt_radius:y + (self.filt_radius * 2)]
-					# rearranges back to default [height, depth, width] then gets the dot product with the filter
-					input4 = np.transpose(input3, (0, 2, 1))
-					output_[y - 1][x - 1] = np.dot(filter_.flatten(), input4.flatten())
+					# extract desired convolution slice
+					input_slice = input_[y - self.filt_radius:y + (self.filt_radius * 2), :, x - self.filt_radius:x + (self.filt_radius * 2)]
+					# transpose slice to match filter dimensions
+					output_[y - 1][x - 1] = np.dot(filter_.flatten(), input_slice.flatten())
 
 		return output_
+
+
+
+
 
 	# input must be an array [height, width]
 	def max_pooling(self, input_):
