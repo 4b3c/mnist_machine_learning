@@ -1,7 +1,7 @@
 import numpy as np, gzip, random, math
 from PIL import Image
 
-np.random.seed(0)
+# np.random.seed(0)
 
 def sigmoid(z):
 	return 1.0 / (1.0 + np.exp(-z))
@@ -38,7 +38,8 @@ class convolutional_layer:
 		self.filt_size = filter_shape[:-1]
 		self.filt_radius = int((self.filt_size[0] - 1) / 2)
 		self.channels = filter_shape[-1]
-		self.filters = np.random.randn(self.channels, self.filt_size[0], self.filt_size[1], self.filt_size[0])
+		# self.filters = np.random.randn(self.channels, self.filt_size[0], self.filt_size[1], self.filt_size[0])
+		self.filters = np.array([np.array([np.array([np.array([1, 1, 1]), np.array([1, 1, 1]), np.array([1, 1, 1])]), np.array([np.array([1, 1, 1]), np.array([1, 1, 1]), np.array([1, 1, 1])]), np.array([np.array([1, 1, 1]), np.array([1, 1, 1]), np.array([1, 1, 1])])])])
 		self.pooling_size = pooling_size
 
 	# input_ must be an image array [height, depth, width]
@@ -57,10 +58,6 @@ class convolutional_layer:
 
 		return output_
 
-
-
-
-
 	# input must be an array [height, width]
 	def max_pooling(self, input_):
 		output_ = np.zeros((int(input_.shape[0] / 2), int(input_.shape[1] / 2)))
@@ -75,11 +72,15 @@ class convolutional_layer:
 		convolved = self.convolve(input_)
 		pooled = self.max_pooling(convolved)
 
-		print(pooled)
+		return pooled
 
 
-input_arr = np.array(Image.open("C:/Users/Abram/Desktop/Programming/Python/mnist_machine_learning/training_data/factorio_image.png"))[:,:,:3]
+input_arr = np.array(Image.open("C:/Users/Abram/Desktop/Programming/Python/mnist_machine_learning/training_data/random.png"))[:,:,:3]
 input_arr = np.transpose(input_arr / 255, (0, 2, 1))
 
-layer = convolutional_layer([3, 3, 4], 2)
-layer.forward_prop(input_arr)
+layer = convolutional_layer([3, 3, 1], 2)
+feature_map = layer.forward_prop(input_arr) * 200
+print(feature_map.shape)
+
+img = Image.fromarray(feature_map, mode = 'L')
+img.save('feature_map.jpg')
