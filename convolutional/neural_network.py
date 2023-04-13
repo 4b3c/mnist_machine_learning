@@ -38,8 +38,9 @@ class convolutional_layer:
 		self.filt_size = filter_shape[:-1]
 		self.filt_radius = int((self.filt_size[0] - 1) / 2)
 		self.channels = filter_shape[-1]
-		# self.filters = np.random.randn(self.channels, self.filt_size[0], self.filt_size[1], self.filt_size[0])
-		self.filters = np.array([np.array([np.array([np.array([1, 1, 1]), np.array([1, 1, 1]), np.array([1, 1, 1])]), np.array([np.array([1, 1, 1]), np.array([1, 1, 1]), np.array([1, 1, 1])]), np.array([np.array([1, 1, 1]), np.array([1, 1, 1]), np.array([1, 1, 1])])])])
+		self.filters = np.random.randn(self.channels, self.filt_size[0], self.filt_size[1], self.filt_size[0])
+		# self.filters = np.array([np.array([np.array([np.array([1, 0, -1]), np.array([2, 0, -2]), np.array([1, 0, -1])]), np.array([np.array([1, 0, -1]), np.array([2, 0, -2]), np.array([1, 0, -1])]), np.array([np.array([1, 0, -1]), np.array([2, 0, -2]), np.array([1, 0, -1])])])])
+		# self.filters = np.array([np.array([np.array([np.array([1, 2, 1]), np.array([0, 0, 0]), np.array([-1, -2, -1])]), np.array([np.array([1, 2, 1]), np.array([0, 0, 0]), np.array([-1, -2, -1])]), np.array([np.array([1, 2, 1]), np.array([0, 0, 0]), np.array([-1, -2, -1])])])])
 		self.pooling_size = pooling_size
 
 	# input_ must be an image array [height, depth, width]
@@ -70,16 +71,17 @@ class convolutional_layer:
 
 	def forward_prop(self, input_):
 		convolved = self.convolve(input_)
-		pooled = self.max_pooling(convolved)
+		# pooled = self.max_pooling(convolved)
 
-		return pooled
+		return convolved
 
 
-input_arr = np.array(Image.open("C:/Users/Abram/Desktop/Programming/Python/mnist_machine_learning/training_data/random.png"))[:,:,:3]
+input_arr = np.array(Image.open("C:/Users/Abram/Desktop/Programming/Python/mnist_machine_learning/training_data/mountain.png"))[:,:,:3]
 input_arr = np.transpose(input_arr / 255, (0, 2, 1))
 
 layer = convolutional_layer([3, 3, 1], 2)
 feature_map = layer.forward_prop(input_arr) * 200
+print(input_arr.shape)
 print(feature_map.shape)
 
 img = Image.fromarray(feature_map, mode = 'L')
