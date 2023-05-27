@@ -75,7 +75,7 @@ class convolutional_layer:
 		return convolved
 
 
-input_arr = np.array(Image.open("C:/Users/Abram/Desktop/Programming/Python/mnist_machine_learning/training_data/idk.png"))[:,:,:3]
+input_arr = np.array(Image.open("../training_data/idk.png"))[:,:,:3]
 input_arr = np.transpose(input_arr / 255, (0, 2, 1))
 
 layer = convolutional_layer([3, 3, 1], 2)
