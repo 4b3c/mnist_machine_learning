@@ -1,7 +1,7 @@
 import numpy as np, gzip, random, math
 from PIL import Image
 
-# np.random.seed(0)
+np.random.seed(312)
 
 def sigmoid(z):
 	return 1.0 / (1.0 + np.exp(-z))
@@ -75,7 +75,7 @@ class convolutional_layer:
 		return convolved
 
 
-input_arr = np.array(Image.open("../training_data/idk.png"))[:,:,:3]
+input_arr = np.array(Image.open("../training_data/image.png"))[:,:,:3]
 input_arr = np.transpose(input_arr / 255, (0, 2, 1))
 
 layer = convolutional_layer([3, 3, 1], 2)
