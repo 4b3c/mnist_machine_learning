@@ -5,7 +5,7 @@ from PIL import Image
 
 
 
-video = cv2.VideoCapture("../training_data/lizard.mp4")
+video = cv2.VideoCapture("../training_data/unfold.mp4")
 layer = nn.convolutional_layer([3, 3, 1], 2)
 
 

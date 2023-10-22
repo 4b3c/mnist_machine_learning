@@ -75,11 +75,11 @@ class convolutional_layer:
 		return convolved
 
 
-input_arr = np.array(Image.open("../training_data/image.png"))[:,:,:3]
-input_arr = np.transpose(input_arr / 255, (0, 2, 1))
+# input_arr = np.array(Image.open("../training_data/image.png"))[:,:,:3]
+# input_arr = np.transpose(input_arr / 255, (0, 2, 1))
 
-layer = convolutional_layer([3, 3, 1], 2)
-feature_map = layer.forward_prop(input_arr) * 200
+# layer = convolutional_layer([3, 3, 1], 2)
+# feature_map = layer.forward_prop(input_arr) * 200
 
-img = Image.fromarray(np.uint8(feature_map))
-img.save('feature_map.jpg')
+# img = Image.fromarray(np.uint8(feature_map))
+# img.save('feature_map.jpg')
